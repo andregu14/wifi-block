@@ -19,10 +19,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.andre.wifi.block",
+      "permissions": [
+        "INTERNET" 
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5a398b2b-d950-41d4-aa0f-c737da2ab406"
+      }
     }
   }
 }
