@@ -21,9 +21,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.andre.wifi.block",
-      "permissions": [
-        "INTERNET" 
-      ]
+      "permissions": ["INTERNET", "ACCESS_NETWORK_STATE"]
     },
     "web": {
       "favicon": "./assets/favicon.png"

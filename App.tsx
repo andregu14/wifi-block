@@ -41,7 +41,9 @@ export default function App() {
   }, []);
 
   function getSid() {
-    return fetch("http://192.168.15.1/cgi-bin/login.cgi")
+    return fetch(
+      "https://united-happily-drake.ngrok-free.app/cgi-bin/login.cgi"
+    )
       .then((response) =>
         response.text().then((html) => {
           const sidMatch = html.match(/var sid = '(.+?)';/);
@@ -80,7 +82,7 @@ export default function App() {
       formData.append("LoginPasswordValue", hashedPassword);
       formData.append("acceptLoginIndex", "1");
 
-      fetch("http://192.168.15.1/cgi-bin/login.cgi", {
+      fetch("https://united-happily-drake.ngrok-free.app/cgi-bin/login.cgi", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: formData.toString(),
@@ -90,6 +92,9 @@ export default function App() {
             const cookie = response.headers.get("set-cookie");
             if (cookie) {
               addLog(`Login bem-sucedido! Cookie obtido: ${cookie}`);
+              const newState = wifiState === "0" ? "1" : "0";
+              setWifiState(newState);
+              saveWifiState(newState);
               wifiToggle(cookie);
             } else {
               addLog("Login bem-sucedido, mas nenhum cookie foi retornado.");
@@ -106,11 +111,12 @@ export default function App() {
   }
 
   function wifiToggle(cookie: string) {
-    const url = "http://192.168.15.1/cgi-bin/settings-wireless-network.cgi";
+    const url =
+      "https://united-happily-drake.ngrok-free.app/cgi-bin/settings-wireless-network.cgi";
     const body =
       wifiState === "1"
-        ? "wlEnable=0&sessionKey=&HideSSID=1..."
-        : "wlEnable=1&sessionKey=&HideSSID=1...";
+        ? "wlEnable=0&sessionKey=&HideSSID=1&wirelessNetWorkTabIndex=2&WirelessMode=12&Channel=0&HtExtcha=1&HT_BW=0&TxPower=100&WMM=&Advanced_set=1&WPSDisable=0&WPSActiveFlag=1&WpsStart=1"
+        : "wlEnable=1&sessionKey=&HideSSID=1&wirelessNetWorkTabIndex=2&WirelessMode=12&Channel=0&HtExtcha=1&HT_BW=0&TxPower=100&WMM=&Advanced_set=1&WPSDisable=0&WPSActiveFlag=1&WpsStart=1";
 
     fetch(url, {
       method: "POST",
@@ -122,9 +128,6 @@ export default function App() {
     })
       .then((response) => {
         if (response.ok) {
-          const newState = wifiState === "0" ? "1" : "0";
-          setWifiState(newState);
-          saveWifiState(newState);
           addLog(
             wifiState === "1"
               ? "Wi-Fi desativado com sucesso!"
@@ -148,13 +151,13 @@ export default function App() {
       <Text style={styles.text}>
         A internet está {wifiState === "0" ? "desligada" : "ligada"}
       </Text>
-      <ScrollView style={styles.logContainer}>
+      {/* <ScrollView style={styles.logContainer}>
         {logs.map((log, index) => (
           <Text key={index} style={styles.logText}>
             {log}
           </Text>
         ))}
-      </ScrollView>
+      </ScrollView> */}
     </View>
   );
 }
